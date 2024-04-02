@@ -8,7 +8,7 @@ With our code we propose one possibilty for a model that uses this dataset in tr
 This model consits of two seperate models. On one side a LSTM that uses visually grounded GloVe embeddings, on the other side a BERT. 
 The result of both models is concatenated and inserted into Fully connected layers that should generate a numerical result.
 <p align="center">
-![ConcatenatedArchitecture_with_background](https://github.com/FlorianLaustererUniTuebingen/Computergraphics/assets/165826773/0a56e475-8726-4471-896f-99911d07aa3b)
+<img src="https://github.com/FlorianLaustererUniTuebingen/Computergraphics/assets/165826773/0a56e475-8726-4471-896f-99911d07aa3b"/>
 </p>
 The model can be found in the "concatenated" folder and the training and validation data can be found in the "concatenated/data" folder
 
