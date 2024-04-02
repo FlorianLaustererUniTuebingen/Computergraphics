@@ -4,7 +4,7 @@ The goal of NumerSense is to increase the performance of PTLMs for the task of n
 E.g. the output of a sentence like "A bird usually has <MASK> legs." is "four" if evaluated by BERT. That's why the team from NumerSense has created a dataset so models can be finetuned to predict those numbers correctly.
 With our code we propose one possibilty for a model that uses this dataset in training
 
-## concatenated
+## Concatenated
 This model consits of two seperate models. On one side a LSTM that uses visually grounded GloVe embeddings, on the other side a BERT. 
 The result of both models is concatenated and inserted into Fully connected layers that should generate a numerical result.
 ![ConcatenatedArchitecture_with_background](https://github.com/FlorianLaustererUniTuebingen/Computergraphics/assets/165826773/0a56e475-8726-4471-896f-99911d07aa3b)
