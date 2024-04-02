@@ -7,8 +7,8 @@ import gensim
 from transformers import BertForSequenceClassification, BertTokenizer
 import torch.nn.functional as F
 
+#These are all the possible outputs for the model
 numerical_labels = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "no": 11}
-
 
 def load_glove_embeddings_from_pickle(pickle_file_path):
     with open(pickle_file_path, 'rb') as file:
@@ -54,7 +54,7 @@ class CustomDataset(Dataset):
 
 class CustomDataCollator:
     def __init__(self, tokenizer, max_sequence_length):
-        self.tokenizer = tokenizer #BertTokenizer.from_pretrained("bert-base-uncased") #CHANGED FOR DEBUG
+        self.tokenizer = tokenizer
         self.max_sequence_length = max_sequence_length
 
     def __call__(self, batch):
@@ -94,11 +94,10 @@ class Lauter(nn.Module):
     def __init__(self, embedding_matrix, input_size, hidden_size, output_size):
         super(Lauter, self).__init__()
         self.dropout_rate = 0.1
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.bert =  BertForSequenceClassification.from_pretrained("bert-base-uncased", output_hidden_states=True)
         self.embedding = nn.Embedding.from_pretrained(embedding_matrix, freeze=False)
         self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, num_layers=1, dropout=self.dropout_rate)
-        self.fc = nn.Linear(1536, 1028)
+        self.fc = nn.Linear(1536, 1028) #1536 because BERT has 768 output and we set hidden_size to 768 too
         self.fc_2 = nn.Linear(1028, 256)
         self.fc_4 = nn.Linear(256, output_size)
         self.batchNorm = nn.BatchNorm1d(1536)
