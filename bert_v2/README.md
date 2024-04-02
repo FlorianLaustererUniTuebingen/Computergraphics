@@ -6,3 +6,16 @@ This folder contains the code for finetuning BERT with the NumerSense dataset. I
 - bert_masked_tut.ipynb contains the same as bert_masked_tut.py but in the notebook format
 - plot.py contains the code that has been used to plot the accuracies of the model for each epoch. The stdout of bert_masked_tut.py was captured and then saved as the files that are being read by plot.py
 - The dataset folders contain the data that is being used for training and validation of the model. Those are formatted versions of the original NumerSense dataset.
+
+## Training the model
+- Install the requirements from the top level readme file
+- then run
+```
+python bert_masked_tut.py
+```
+
+## Plots
+In our case the stdout was captured and is then being used for the plots. You could just copy and paste it into a file, adjust the path in the code and then run:
+```
+python plot.py
+```
