@@ -8,7 +8,7 @@ from transformers import BertTokenizer
 import torch.nn.functional as F
 import pickle
 
-CLEAN_START = True
+CLEAN_START = True #Set this to false if you already have a tokenizer and an embedding matrix, 
 
 batch_size = 2
 epochs = 50
@@ -21,7 +21,7 @@ max_sequence_length = 50 #Hardcoded because tokenizing might mess with sequence 
 tokenizer = None
 if CLEAN_START:
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', model_max_length=max_sequence_length)
-    with open("tokenizer.pickle", "wb") as f:
+    with open("tokenizer.pickle", "wb") as f: #Save tokenizer so it can be reused in the next training
         pickle.dump(tokenizer, f)
 else:
     with open("tokenizer.pickle", "rb") as f:
@@ -34,7 +34,7 @@ glove_embeddings_matrix = None
 if CLEAN_START:
     glove_embeddings = lauter.load_glove_embedding_from_gensim('v_glove_300d_2.0')
     glove_embeddings_matrix = lauter.load_glove_embedding_matrix_from_gensim(glove_embeddings, tokenizer)
-    with open("glove_embeddings.pickle", "wb") as f:
+    with open("glove_embeddings.pickle", "wb") as f: #Save embeddings and embedding matrix so it can be reused in the next training
         pickle.dump(glove_embeddings, f)
     with open("glove_embeddings_matrix.pickle", "wb") as f:
         pickle.dump(glove_embeddings_matrix, f)
@@ -63,8 +63,9 @@ optimizer = Adam(model.parameters(), lr=learning_rate)
 
 scheduler = StepLR(optimizer, step_size=10, gamma=0.01)
 
-model.to(model.device)
-#Freeze embeddings
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model.to(device)
+#Freeze embeddings for the first few epochs
 model.embedding.weight.requires_grad = False 
 
 print("start training...")
@@ -76,9 +77,9 @@ for epoch in range(epochs):
         #We need to reinitialize the optimizer after unfreezing the embeddings
         optimizer = Adam(model.parameters(), lr = learning_rate)
         scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
-    for inputs, targets in dataloader:
+    for inputs, targets in dataloader: #training loop
         optimizer.zero_grad()
-        targets, inputs = targets.to(model.device), inputs.to(model.device)
+        targets, inputs = targets.to(device), inputs.to(device)
 
         outputs = model(inputs)
 
@@ -89,14 +90,14 @@ for epoch in range(epochs):
 
     scheduler.step()
 
-    model.eval()
-    categories = {} # BATCH SIZE NEEDS TO BE 1 FOR THIS TO WORK
+    model.eval() #Switch model to eval so we can check the accuracy for every epoch
+    categories = {} # BATCH SIZE IN VALIDATION DATALOADER NEEDS TO BE 1 FOR THIS TO WORK
     all_targets = []
     all_predictions = []
     validation_file = open('../data/validation.masked.categorized.txt')
     with torch.no_grad():
         for inputs, targets in test_dataloader:
-            inputs, targets = inputs.to(model.device), targets.to(model.device)
+            inputs, targets = inputs.to(device), targets.to(device)
 
             category = validation_file.readline().split("\t")[-1].replace("\n", "")
             if category not in categories.keys():
@@ -132,4 +133,4 @@ for epoch in range(epochs):
     print(f'Epoch {epoch + 1}/{epochs}, Loss: {loss.item()}, Learning rate: {scheduler.get_last_lr()[0]}')
 
 #torch.save(lstm, "lstm_model.pth")
-torch.save(model.state_dict(), "lstm_model.pth")
+torch.save(model.state_dict(), "lstm_model.pth") #save model for further use
