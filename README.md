@@ -15,3 +15,14 @@ The model can be found in the "concatenated" folder and the training and validat
 ## BERT V2
 Since our concatenated model did not train as well as we had hoped, we created a regular BERT model that should be finetuned using the NumerSense dataset. 
 The code for this can be found in the "bert_v2" folder. The training data is in the "bert_v2/masked_training_dataset" folder and the validation data is in the "bert_v2/masked_validation_dataset" folder
+
+## Requirements
+Both models have been developed with python 3.11
+The necessary libraries can be installed with
+```
+conda install --file requirements.txt
+```
+or
+```
+pip install -r requirements.txt
+```
