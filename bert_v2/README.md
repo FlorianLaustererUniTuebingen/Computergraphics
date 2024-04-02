@@ -1,3 +1,7 @@
+# Finetuning BERT
+This folder contains the code for finetuning BERT with the NumerSense dataset. In every epoch the model is once trained and once evaluated. By evaluating it every epoch one can see the progress that the model is doing. 
+
+## Files
 bert_masked_tut.py contains the working version of the model where only BERT has been used and is being trained as well as being evaluated  
 bert_masked_tut.ipynb contains the same as bert_masked_tut.py but in the notebook format
 
