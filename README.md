@@ -7,7 +7,7 @@ With our code we propose one possibilty for a model that uses this dataset in tr
 ## concatenated
 This model consits of two seperate models. On one side a LSTM that uses visually grounded GloVe embeddings, on the other side a BERT. 
 The result of both models is concatenated and inserted into Fully connected layers that should generate a numerical result.
-![ConcatenatedArchitecture](https://github.com/FlorianLaustererUniTuebingen/Computergraphics/assets/165826773/5d2981fa-9c33-4e49-a166-f5674cad4a9b)
+![ConcatenatedArchitecture_with_background](https://github.com/FlorianLaustererUniTuebingen/Computergraphics/assets/165826773/0a56e475-8726-4471-896f-99911d07aa3b)
 The model can be found in the "concatenated" folder and the training and validation data can be found in the "concatenated/data" folder
 
 ## BERT V2
